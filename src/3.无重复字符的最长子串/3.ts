@@ -1,6 +1,4 @@
-import { expect, it, describe } from "vitest";
-
-function lengthOfLongestSubstring(s: string): number {
+export function lengthOfLongestSubstring(s: string): number {
     if (s.length === 0) {
         return 0;
     }
@@ -41,21 +39,3 @@ function lengthOfLongestSubstring(s: string): number {
 
     return max;
 }
-
-describe('测试', () => {
-    it('abcabcbb', () => {
-        expect(lengthOfLongestSubstring('abcabcbb')).toBe(3)
-    });
-
-    it('should a', () => {
-        expect(lengthOfLongestSubstring('a')).toBe(1);
-    });
-
-    it('bbbbb', () => {
-        expect(lengthOfLongestSubstring('bbbbb')).toBe(1);
-    });
-
-    it('pwwkew', () => {
-        expect(lengthOfLongestSubstring('pwwkew')).toBe(3);
-    });
-});

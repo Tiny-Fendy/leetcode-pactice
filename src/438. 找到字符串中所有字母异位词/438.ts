@@ -1,6 +1,4 @@
-import { describe, expect, it } from "vitest";
-
-function findAnagrams(s: string, p: string): number[] {
+export function findAnagrams(s: string, p: string): number[] {
     const result: number[] = [];
     // 创建p的map
     const createStrMap = (str: string) => {
@@ -46,13 +44,3 @@ function findAnagrams(s: string, p: string): number[] {
 
     return result;
 }
-
-describe('测试', () => {
-    it('cbaebabacd, abc', () => {
-        expect(findAnagrams('cbaebabacd', 'abc')).toEqual([0, 6]);
-    });
-
-    it('abab, ab', () => {
-        expect(findAnagrams('abab', 'ab')).toEqual([0, 1, 2]);
-    });
-});
