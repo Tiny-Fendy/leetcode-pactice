@@ -18,7 +18,7 @@ function subarraySum(nums: number[], k: number): number {
 
     while (r < nums.length) {
         // 获取滑块内的数
-        nums.slice(l, r).reduce((pre, currentValue) => p, 0)
+        nums.slice(l, r).reduce((pre, currentValue) => pre + currentValue, 0)
 
     }
 
