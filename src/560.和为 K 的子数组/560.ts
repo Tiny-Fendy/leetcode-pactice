@@ -13,16 +13,25 @@
  */
 
 function subarraySum(nums: number[], k: number): number {
-    let l = 0;
-    let r = 0;
+    const map = new Map<number, number>();
+    let count = 0;
+    let total = 0;
 
-    while (r < nums.length) {
-        // 获取滑块内的数
-        nums.slice(l, r).reduce((pre, currentValue) => pre + currentValue, 0)
+    for (const num of nums) {
+        const current = map.get(total) || 0;
 
+        // 先设置
+        map.set(total, current + 1);
+
+        // 更新total值，然后查询
+        total += num;
+
+        if (map.has(total - k)) {
+            count += (map.get(total - k) || 0);
+        }
     }
 
-    return 0;
+    return count;
 }
 
 export default subarraySum;

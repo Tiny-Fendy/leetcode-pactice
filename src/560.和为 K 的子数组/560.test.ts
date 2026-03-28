@@ -14,12 +14,16 @@ describe('560. 和为 K 的子数组', () => {
     expect(subarraySum([1, -1, 0], 0)).toBe(3)
   })
 
-  it('单个元素等于 k', () => {
+  it('单个元素等于 k=5', () => {
     expect(subarraySum([5], 5)).toBe(1)
   })
 
-  it('单个元素不等于 k', () => {
+  it('单个元素不等于 k=3', () => {
     expect(subarraySum([5], 3)).toBe(0)
+  })
+
+  it('单个元素不等于 k=0', () => {
+    expect(subarraySum([1], 0)).toBe(0)
   })
 
   it('空数组', () => {
