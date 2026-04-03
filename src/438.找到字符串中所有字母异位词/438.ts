@@ -13,49 +13,44 @@
  * 输出：[0,1,2]
  */
 
+/**
+ * 参考 灵茶山艾府 的解答，不定长滑动窗口
+ * 链接：https://leetcode.cn/problems/find-all-anagrams-in-a-string/solutions/2969498/liang-chong-fang-fa-ding-chang-hua-chuan-14pd/
+ * @param s
+ * @param p
+ */
 export function findAnagrams(s: string, p: string): number[] {
     const result: number[] = [];
-    // 创建p的map
-    const createStrMap = (str: string) => {
-        const map: Record<string, number> = {};
+    // 需要的字符组
+    const cnt: number[] = new Array(26).fill(0);
 
-        for (let i = 0; i < str.length; i++) {
-            const chat = str[i];
-            map[chat] = map[chat] ? map[chat] + 1 : 1;
+    for (const char of p) {
+        cnt[char.charCodeAt(0) - 'a'.charCodeAt(0)]++;
+    }
+
+    // 左端点
+    let left = 0;
+
+    for (let right = 0; right < s.length; right++) {
+        const index = s[right].charCodeAt(0) - 'a'.charCodeAt(0);
+
+        // 右端点进入窗口
+        cnt[index]--;
+
+        // 有数字小于0，证明有字符多了，需要缩小滑动窗口，一直要缩小到恰好等于需要的数量
+        // 如果数量大于0，则证明数量还不够，继续扩大滑动窗口
+        while (cnt[index] < 0) {
+            // 移除左端点
+            const leftIndex = s[left].charCodeAt(0) - 'a'.charCodeAt(0);
+            cnt[leftIndex]++;
+            left++;
         }
 
-        return map;
-    };
-    // 校验两个check是相等的
-    const checkMap = (map1: Record<string, number>, map2: Record<string, number>) => {
-        return Object.keys(map1).every((key) => map1[key] === map2[key]);
-    };
-    const pMap = createStrMap(p);
-
-    let left = 0;
-    const lMap = createStrMap(s.slice(0, p.length));
-
-    do {
-        if (checkMap(lMap, pMap)) {
+        // 如果长度刚刚好相等，那么就说明匹配成功（理解这个关键点）
+        if (right - (left - 1) === p.length) {
             result.push(left);
         }
-
-        // 同步map
-        const chat = s[left];
-        const num = lMap[chat];
-
-        // 减去左边
-        if (num > 1) {
-            lMap[chat] = num - 1;
-        } else if (num === 1) {
-            delete lMap[chat];
-        }
-
-        // 加上右边
-        const newChat = s[left + p.length];
-        lMap[newChat] = lMap[newChat] ? lMap[newChat] + 1 : 1;
-        left++;
-    } while ((left + p.length) <= s.length);
+    }
 
     return result;
 }
