@@ -19,31 +19,21 @@
  */
 
 function minSubArrayLen(target: number, nums: number[]): number {
-    let minLen = 0;
+    let minLen = Infinity;
     let l = 0;
-    let r = 0;
-    let total = nums[0];
+    let total = 0;
 
-    while (r < nums.length) {
-        if (total < target) {
-            // 扩大
-            r++;
-            total += nums[r];
-        } else if (total >= target) {
-            // 找到了
-            if (!minLen) {
-                // 还没有记录
-                minLen = r - l + 1;
-            } else if (r - (l - 1) <= minLen) {
-                minLen = r - l + 1;
-            }
+    for (let r = 0; r < nums.length; r++) {
+        total += nums[r];
 
-            total -= nums[l];
-            l++;
+        while (total >= target) {
+            minLen = Math.min(minLen, r - l + 1);
+
+            total -= nums[l++];
         }
     }
 
-    return minLen;
+    return minLen === Infinity ? 0 : minLen;
 }
 
 export default minSubArrayLen;
