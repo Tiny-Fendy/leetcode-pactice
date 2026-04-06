@@ -20,50 +20,63 @@
  * 输出：""
  */
 
-// a包含b
-function isCover(cntA: number[], cntB: number[]) {
-    let result = true;
-
-    for (let i = 0;i < cntA.length;i++) {
-        if (cntA[i] < cntB[i]) {
-            result = false;
-            break;
-        }
-    }
-
-    return result;
-}
-
 function minWindow(s: string, t: string): string {
     if (s.length < t.length || !t.length) {
         return '';
     }
 
+    const BASE_CODE = 'A'.charCodeAt(0);
     let minStr = '';
+    // 有多少种字符
+    let requiredCount = 0;
 
     // 构造map
     const cntT = Array(128).fill(0);
     const cntS = Array(128).fill(0);
 
     for (const p of t) {
-        cntT[p.charCodeAt(0) - 'A'.charCodeAt(0)]++;
+        const code = p.charCodeAt(0) - BASE_CODE;
+
+        if (cntT[code] === 0) {
+            requiredCount++;
+        }
+        cntT[code]++;
     }
 
     let l = 0;
+    // 窗口内的个数
+    let winCount = 0;
 
     for (let r = 0; r < s.length; r++) {
+        const code = s.charCodeAt(r) - BASE_CODE;
 
-        // 右端加入
-        cntS[s.charCodeAt(r) - 'A'.charCodeAt(0)]++;
+        // 在目标范围内才加
+        if (cntT[code] > 0) {
+            cntS[code]++;
 
-        // 是否包含
-        while (isCover(cntS, cntT)) {
+            // 个数能覆盖到
+            if (cntS[code] === cntT[code]) {
+                winCount++;
+            }
+        }
+
+        // 如果
+        while (winCount === requiredCount) {
             if (r - (l - 1) <= minStr.length || !minStr.length) {
                 minStr = s.substring(l, r + 1);
             }
 
+            const lCode = s.charCodeAt(l) - BASE_CODE;
+
+            if (cntT[lCode] > 0) {
+                if (cntS[lCode] === cntT[lCode]) {
+                    winCount--;
+                }
+
+                cntS[lCode]--;
+            }
+
             // 左边缩小
-            cntS[s[l].charCodeAt(0) - 'A'.charCodeAt(0)]--;
             l++;
         }
     }
