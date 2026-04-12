@@ -20,29 +20,25 @@
  */
 
 // 注意：需要原地修改数组，不要返回新数组
+// 三次反转法
 function rotate(nums: number[], k: number): void {
-    if (k === nums.length) {
-        return;
-    }
-
     if (k > nums.length) {
         k = k % nums.length;
     }
 
-    const tem = nums.slice(-k);
-    const yu = nums.length - k;
+    if (k === 0) return;
 
-    for (let i = nums.length - 1;i >= 0;i--) {
-        // [1,2,3, 4,5,6,7]，i > 4的时候
-        if (i > k - 1) {
-            // 即4,5,6,7 i > 2
-            // nums[i = 6] = nums[i = 4]
-            // nums[i] = nums[i - (k - 1)]
-            nums[i] = nums[i - k];
-        } else {
-            nums[i] = tem[i];
+    const reverse= (start: number, end: number) => {
+        while (start < end) {
+            [nums[start], nums[end]] = [nums[end], nums[start]];
+            start++;
+            end--;
         }
-    }
+    };
+
+    reverse(0, nums.length - 1);
+    reverse(0, k - 1);
+    reverse(k, nums.length - 1);
 }
 
 export default rotate;
