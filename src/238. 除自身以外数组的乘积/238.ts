@@ -16,43 +16,27 @@
  * 输出: [0,0,9,0,0]
  */
 
-// 常规的两个数组分别保存前后缀积时间复杂度O(n)，O(n)
+// 空间复杂度O(1)，直接把结果合并计算到结果数组上
 function productExceptSelf(nums: number[]): number[] {
     // 注意：不能使用除法，需要在 O(n) 时间内完成
-    const tl: number[] = [];
-    const tr: number[] = [];
     const result: number[] = [];
 
-    for (let i = 0;i < nums.length;i++) {
-        const lNum = nums[i];
-        const rNum = nums[nums.length - 1 - i];
-
-        if (i === 0) {
-            tl.push(lNum);
-            tr.unshift(rNum);
+    for (let i = nums.length - 1;i >= 0;i--) {
+        if (i === nums.length - 1) {
+            result.unshift(1);
         } else {
-            tl.push(tl[i - 1] * lNum);
-            tr.unshift(tr[0] * rNum);
+            result.unshift(nums[i + 1] * result[0]);
         }
     }
 
-    // [1, 2, 3, 4]
-    // tl [1, 2, 6, 24]
-    // tr [24, 24, 12, 4]
-    // 1 * 24, 1 * 12, 2 * 4, 6 * 1
-    // (tl[i - 1] || 1) * (tr[i + 1] || 1)
+    let lNum = 1;
+
     for (let i = 0;i < nums.length;i++) {
-        let num = 0;
+        const cur = lNum * result[i];
 
-        if (i === 0) {
-            num = tr[1];
-        } else if (i === nums.length - 1) {
-            num = tl[i - 1];
-        } else {
-            num = tl[i - 1] * tr[i + 1];
-        }
-
-        result.push(num ? num : 0);
+        // 处理-0
+        result[i] = cur === 0 ? Math.abs(cur) : cur;
+        lNum *= nums[i];
     }
 
     return result;
