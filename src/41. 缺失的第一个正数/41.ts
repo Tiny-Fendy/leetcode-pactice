@@ -20,29 +20,26 @@
  * 解释：最小的正数 1 没有出现。
  */
 
+// 标准的数字原地调换法
 function firstMissingPositive(nums: number[]): number {
-    // 要求：时间复杂度 O(n)，空间复杂度 O(1)
-    const map = new Map<number, number>();
-    let min = 1;
-
-    for (let i = 0; i < nums.length; i++) {
-        const num = nums[i];
-
-        if (num <= 0) {
-            continue;
-        }
-
-        map.set(num, 1);
-
-        // 找到map中不存在的最小的数
-        while (map.has(min)) {
-            // 去掉这个数
-            map.delete(min);
-            min++;
+    for (let i = 0;i <nums.length;i++) {
+        // 1. 当前位置的数字不对
+        // 2. 当前位置编号大于0
+        // 3. 处理重复数字，要调换的目标序号
+        // 4. 对换的目标的值存在，比如超出数组长度
+        while (nums[i] > 0 && nums[i] !== i + 1 && nums[nums[i] - 1] < nums.length && nums[nums[i] - 1] !== nums[i]) {
+            // 执行调换，顺序很重要!
+            [nums[nums[i] - 1], nums[i]] = [nums[i], nums[nums[i] - 1]];
         }
     }
 
-    return min;
+    for (let i = 0;i < nums.length;i++) {
+        if (nums[i] !== i + 1) {
+            return i + 1;
+        }
+    }
+
+    return nums.length + 1;
 }
 
 export default firstMissingPositive;

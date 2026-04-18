@@ -6,6 +6,10 @@ describe('41. 缺失的第一个正数', () => {
     expect(firstMissingPositive([1, 2, 0])).toBe(3)
   })
 
+  it('示例 1: [0,1,2]', () => {
+    expect(firstMissingPositive([0, 1, 2])).toBe(3)
+  })
+
   it('示例 2: [3,4,-1,1]', () => {
     expect(firstMissingPositive([3, 4, -1, 1])).toBe(2)
   })
@@ -20,6 +24,10 @@ describe('41. 缺失的第一个正数', () => {
 
   it('单个元素 2', () => {
     expect(firstMissingPositive([2])).toBe(1)
+  })
+
+  it('调换的目标值不存在', () => {
+    expect(firstMissingPositive([2147483647])).toBe(1)
   })
 
   it('空数组', () => {
