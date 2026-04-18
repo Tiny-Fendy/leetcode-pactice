@@ -27,7 +27,7 @@ function firstMissingPositive(nums: number[]): number {
         // 2. 当前位置编号大于0
         // 3. 处理重复数字，要调换的目标序号
         // 4. 对换的目标的值存在，比如超出数组长度
-        while (nums[i] > 0 && nums[i] !== i + 1 && nums[nums[i] - 1] < nums.length && nums[nums[i] - 1] !== nums[i]) {
+        while (nums[i] > 0 && nums[i] !== i + 1 && nums[i] < nums.length && nums[nums[i] - 1] !== nums[i]) {
             // 执行调换，顺序很重要!
             [nums[nums[i] - 1], nums[i]] = [nums[i], nums[nums[i] - 1]];
         }

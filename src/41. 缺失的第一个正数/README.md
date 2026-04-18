@@ -14,10 +14,10 @@
 // 原地置换
 for (let i = 0; i < nums.length; i++) {
     while (
-        nums[i] > 0 &&                    // 是正整数
-        nums[i] !== i + 1 &&              // 不在正确位置
-        nums[nums[i] - 1] < nums.length && // 目标位置有效
-        nums[nums[i] - 1] !== nums[i]     // 避免重复数字死循环
+        nums[i] > 0 &&              // 是正整数
+        nums[i] !== i + 1 &&        // 不在正确位置
+        nums[i] < nums.length &&    // 值在有效范围内 [1, n-1]
+        nums[nums[i] - 1] !== nums[i] // 避免重复数字死循环
     ) {
         [nums[nums[i] - 1], nums[i]] = [nums[i], nums[nums[i] - 1]];
     }
@@ -36,16 +36,21 @@ return nums.length + 1;
 1. **while 循环条件**（四个条件缺一不可）：
    - `nums[i] > 0`：只处理正整数
    - `nums[i] !== i + 1`：当前数字不在正确位置
-   - `nums[nums[i] - 1] < nums.length`：目标位置的值在有效范围内（防止越界和无限循环）
+   - `nums[i] < nums.length`：当前值在有效范围内 `[1, n-1]`，避免值为 n 时的问题
    - `nums[nums[i] - 1] !== nums[i]`：避免重复数字导致死循环
 
-2. **交换顺序**：解构赋值 `[nums[nums[i] - 1], nums[i]] = [nums[i], nums[nums[i] - 1]]` 同时完成两个位置的交换
+2. **为什么用 `nums[i] < nums.length`**：
+   - 直接检查当前值是否在 `[1, n-1]` 范围内，更直观
+   - 值为 `n` 的元素已经在或应该在最后一个位置，不需要参与交换
+   - 旧写法 `nums[nums[i] - 1] < nums.length` 检查目标位置的值，逻辑复杂且易错
 
-3. **时间复杂度保证**：虽然嵌套了 while 循环，但每个元素最多被交换到正确位置一次，总体仍是 O(n)
+3. **交换顺序**：解构赋值 `[nums[nums[i] - 1], nums[i]] = [nums[i], nums[nums[i] - 1]]` 同时完成两个位置的交换
+
+4. **时间复杂度保证**：虽然嵌套了 while 循环，但每个元素最多被交换到正确位置一次，总体仍是 O(n)
 
 ## 易错点
 1. **重复数字处理**：如果没有 `nums[nums[i] - 1] !== nums[i]` 条件，遇到重复数字会无限循环
-2. **边界条件**：`nums[nums[i] - 1] < nums.length` 确保目标值不会导致后续访问越界
+2. **边界条件**：`nums[i] < nums.length` 确保值为 n 的元素不参与交换，避免问题
 3. **交换顺序**：解构赋值时，左边先计算 `nums[nums[i] - 1]`，此时 `nums[i]` 还是旧值
 4. **返回值**：如果所有位置都正确，返回 `nums.length + 1`
 
