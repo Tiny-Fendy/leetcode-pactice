@@ -12,51 +12,33 @@
  * 输出：[1,2,3,4,8,12,11,10,9,5,6,7]
  */
 
+const DES = [[1, 0], [0, 1], [-1, 0], [0, -1]];
 function spiralOrder(matrix: number[][]): number[] {
     if (matrix.length === 0) return [];
 
-    // 提示：模拟螺旋遍历过程，维护四个边界
-    let left = 0;
-    let top = 0;
-    let right = matrix[0].length - 1;
-    let bottom = matrix.length - 1;
-    // 列-横向走-x坐标
-    let col = 0;
-    // 行-竖向走-y坐标
-    let row = 0;
-    // 移动方位
-    let des: 'right' | 'down' | 'left' | 'up' = 'right';
+    // 横向长度
+    let colLen = matrix[0].length;
+    // 竖向长度
+    let rowLen = matrix.length - 1;
+    let SIZE =  colLen * (rowLen + 1);
+    // 当前位置
+    let loc = [-1, 0];
 
-    const result = [];
+    const result: number[] = [];
 
-    while (col <= right && col >= left && row <= bottom && row >= top) {
-        result.push(matrix[row][col]);
+    for (let di = 0;result.length < SIZE;di = (di + 1) % 4) {
+        const [dc, dr] = DES[di];
+        // 步数
+        const step = dc === 0 ? rowLen : colLen;
 
-        // 判断是否需要修改方向
-        if (col === right && row === top && des === 'right') {
-            top++;
-            des = 'down';
-        } else if (col === right && row === bottom && des === 'down') {
-            right--;
-            des = 'left';
-        } else if (col === left && row === bottom && des === 'left') {
-            bottom--;
-            des = 'up';
-        } else if (col === left && row === top && des === 'up') {
-            left++;
-            des = 'right';
+        // 走几步
+        for (let i = 0;i < step;i++) {
+            loc[0] += dc;
+            loc[1] += dr;
+            result.push(matrix[loc[1]][loc[0]]);
         }
 
-        // 移动坐标
-        if (des === 'right') {
-            col++;
-        } else if (des === 'down') {
-            row++;
-        } else if (des === 'left') {
-            col--;
-        } else if (des === 'up') {
-            row--;
-        }
+        dc === 0 ? rowLen-- : colLen--;
     }
 
     return result;
