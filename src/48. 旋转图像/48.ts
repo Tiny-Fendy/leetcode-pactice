@@ -13,33 +13,26 @@
  * 输出：[[15,13,2,5],[14,3,4,1],[12,6,8,9],[16,7,10,11]]
  */
 
+/**
+ * 解法：转置 + 左右翻转
+ * 思路：先沿主对角线转置矩阵，再对每行左右翻转
+ * 评价：✅强烈推荐。最简洁的原地旋转解法，两步操作直观易懂，代码量最少，面试首选。
+ */
+
 function rotate(matrix: number[][]): void {
-    for (let row = 0;row < Math.floor(matrix.length / 2); row++) {
-        // r左上角顶点
-        for (let col = row;col < (matrix.length - 1) - row;col++) {
-            const len = matrix.length - 1;
+    // 翻转法，对角线翻转一次，横向翻转一次。
+    for (let r = 0;r < matrix.length; r++) {
+        for (let c = r; c < matrix[0].length; c++) {
+            // 对角转置矩阵，不能使用结构
+            const tem = matrix[c][r];
 
-            // 本次调换的列表
-            const dotList = [
-                [row, col],
-                [len - col, row],
-                [len - row, len - col],
-                [col, len - row]
-            ];
-            let store = matrix[dotList[0][0]][dotList[0][1]];
-
-            for (let m = 0;m <= dotList.length - 1;m ++) {
-                const cur = dotList[m];
-                const next = dotList[m + 1];
-
-                if (next) {
-                    // 修改值
-                    matrix[cur[0]][cur[1]] = matrix[next[0]][next[1]];
-                } else {
-                    matrix[cur[0]][cur[1]] = store;
-                }
-            }
+            matrix[c][r] = matrix[r][c];
+            matrix[r][c] = tem;
         }
+
+        // 横向翻转同行
+        // 两次循环合并为一次
+        matrix[r].reverse();
     }
 }
 
